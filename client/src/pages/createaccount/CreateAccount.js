@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import SnapShot from '../../images/snapshot.jpg';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useIdentityContext } from 'react-netlify-identity-gotrue';
 
 const createaccountContainer = {
@@ -88,10 +88,10 @@ const createaccountTab = {
 const CreateAccount = () => {
 
     const identity = useIdentityContext()
-    const history = useHistory()
+    const navigate = useNavigate()
     
     const handleClose = () => {
-      history.push('/Confirm')
+      navigate('/userdashboard')
       console.log("Should close now...")
     
     }
