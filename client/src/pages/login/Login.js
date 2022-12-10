@@ -85,7 +85,7 @@ const createaccountTab = {
 
 
 
-const Login = () => {
+const Login = (props) => {
 
     const identity = useIdentityContext()
     const navigate = useNavigate()
@@ -164,10 +164,9 @@ const Login = () => {
            
             setStatus({success: true})
             setSubmitting(false)
-            await identity.signup({
-              email: value.email, password: value.password, user_metadata: {
-                full_name: value.name
-              }
+            await identity.login({
+              email: value.email, 
+              password: value.password
             }).then(() => {
               handleClose()
               console.log('Submit Successful!')
@@ -177,7 +176,9 @@ const Login = () => {
             setStatus({success: false})
             setErrors({ submit: err.message })
             setSubmitting(false)
-        } 
+        } finally {
+          handleClose()
+        }
         }}
         >
         {({errors, 

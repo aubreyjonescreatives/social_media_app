@@ -85,7 +85,7 @@ const createaccountTab = {
 
 
 
-const CreateAccount = () => {
+const CreateAccount = (props) => {
 
     const identity = useIdentityContext()
     const navigate = useNavigate()
