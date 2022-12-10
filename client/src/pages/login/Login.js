@@ -36,7 +36,7 @@ const LoginCardContent = {
 }
 
 
-const HelloMemos = {
+const HelloMoments = {
     marginTop: '50px'
 }
 
@@ -125,11 +125,11 @@ const Login = () => {
         <Typography 
         gutterBottom variant="h5" 
         component="div"
-        sx={HelloMemos}>
-          HelloMemos
+        sx={HelloMoments}>
+          HelloMoments
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Share memories around the world with loved ones today. 
+          Share moments around the world with loved ones today. 
         </Typography>
       </CardContent>
       <CardActions sx={LoginCardActions}>
