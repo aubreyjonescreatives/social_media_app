@@ -58,20 +58,20 @@ marginBottom: '20px'
 }
 
 
-const createaccountForm = {
-    marginTop: '50px'
-}
+// const createaccountForm = {
+//     marginTop: '50px'
+// }
 
 
-const forminputHeader = {
-    fontSize: '50px'
-}
+// const forminputHeader = {
+//     fontSize: '50px'
+// }
 
 
 
-const createaccountFormButton = {
-    marginTop: '50px'
-}
+// const createaccountFormButton = {
+//     marginTop: '50px'
+// }
 
 
 
@@ -160,7 +160,7 @@ const CreateAccount = (props) => {
                 .required('Email is required.'),
                 password: Yup.string()
                 .min(6, 'Must include at least 6 characters.')
-                .max(25, 'We KNOW your password isn' + 't more than 25 characters long.')
+                .max(25, 'We KNOW your password is not more than 25 characters long.')
                 .required('A password is required.')
             })}
         onSubmit={ async (value, {setErrors, setStatus, setSubmitting}) => {

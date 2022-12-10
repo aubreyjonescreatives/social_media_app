@@ -58,20 +58,20 @@ marginBottom: '20px'
 }
 
 
-const loginForm = {
-    marginTop: '50px'
-}
+// const loginForm = {
+//     marginTop: '50px'
+// }
 
 
-const forminputHeader = {
-    fontSize: '50px'
-}
+// const forminputHeader = {
+//     fontSize: '50px'
+// }
 
 
 
-const loginFormButton = {
-    marginTop: '50px'
-}
+// const loginFormButton = {
+//     marginTop: '50px'
+// }
 
 
 
@@ -156,7 +156,7 @@ const Login = (props) => {
                 .required('Email is required.'),
                 password: Yup.string()
                 .min(6, 'Must include at least 6 characters.')
-                .max(25, 'We KNOW your password isn' + 't more than 25 characters long.')
+                .max(25, 'We KNOW your password is not more than 25 characters long.')
                 .required('A password is required.')
             })}
         onSubmit={ async (value, {setErrors, setStatus, setSubmitting}) => {

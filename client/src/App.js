@@ -2,7 +2,7 @@ import './App.css';
 import {
   createBrowserRouter, 
   RouterProvider, 
-  Route, 
+ // Route, 
   Outlet,
 } from 'react-router-dom'; 
 import Landing from './pages/landing/Landing.js'; 
