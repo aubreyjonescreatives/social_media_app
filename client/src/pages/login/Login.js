@@ -74,6 +74,18 @@ const loginFormButton = {
 }
 
 
+const createaccountTab = {
+ //   borderBottom: '2px solid grey'
+    
+    
+    }
+
+
+
+
+
+
+
 const validationSchema = yup.object({
     email: yup
       .string('Enter your email')
@@ -135,7 +147,9 @@ const Login = () => {
       <CardActions sx={LoginCardActions}>
         <Typography size="small"
         sx={loginTab}>LOGIN</Typography>
-        <Typography size="small">CREATE ACCOUNT</Typography>
+        <Typography size="small"
+        sx={createaccountTab}
+        >CREATE ACCOUNT</Typography>
       </CardActions>
       <CardContent sx={LoginCardContent}>
         <Typography 
