@@ -1,36 +1,36 @@
 import * as React from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import Box from '@mui/material/Box';
+import { Box, Button, TextField, FormHelperText } from '@mui/material'
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { Container, Row, Col } from 'react-grid-system';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import TextField from '@material-ui/core/TextField';
-import SnapShot from '../../images/snapshot.jpg'
+import SnapShot from '../../images/snapshot.jpg';
+import { useNavigate } from 'react-router-dom';
+import { useIdentityContext } from 'react-netlify-identity-gotrue';
 
-const LoginContainer = {
+const loginContainer = {
 width: '100%', 
 
 
 }
 
-const LoginCard = {
+const loginCard = {
 width: '90%', 
-margin: '100px auto', 
-height: '600px', 
+margin: '50px auto', 
+height: '700px', 
 
 }
 
-const LoginCardImage = {
-    height: '600px',
+const loginCardImage = {
+    height: '700px',
 
 }
 
-const LoginCardContent = {
+const loginCardContent = {
 
 
 }
@@ -40,7 +40,7 @@ const HelloMoments = {
     marginTop: '50px'
 }
 
-const LoginCardActions = {
+const loginCardActions = {
 textAlign: 'center', 
 justifyContent: 'space-evenly'
 
@@ -74,126 +74,177 @@ const loginFormButton = {
 }
 
 
+
+
+
 const createaccountTab = {
  //   borderBottom: '2px solid grey'
     
-    
-    }
+}
 
-
-
-
-
-
-
-const validationSchema = yup.object({
-    email: yup
-      .string('Enter your email')
-      .email('Enter a valid email')
-      .required('Email is required'),
-    password: yup
-      .string('Enter your password')
-      .min(8, 'Password should be of minimum 8 characters length')
-      .required('Password is required'),
-  });
-  
 
 
 
 const Login = () => {
 
-    const formik = useFormik({
-        initialValues: {
-          email: 'foobar@example.com',
-          password: 'foobar',
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-          alert(JSON.stringify(values, null, 2));
-        },
-      });
-
-
+    const identity = useIdentityContext()
+    const navigate = useNavigate()
+    
+    const handleClose = () => {
+      navigate('/userdashboard')
+      console.log("Should close now...")
+    
+    }
 
 
   return (
     <>
     <Box>
-    <Container sx={LoginContainer}>
+    <Container sx={loginContainer}>
     
 
-    <Card sx={LoginCard}>
+    <Card sx={loginCard}>
     <Row>
     <Col>
       <CardMedia
         component="img"
         alt="snapshot"
         image={SnapShot} 
-        sx={LoginCardImage}
+        sx={loginCardImage}
       />
       </Col>
       <Col>
-      <CardContent sx={LoginCardContent}>
+      <CardContent sx={loginCardContent}>
         <Typography 
         gutterBottom variant="h5" 
         component="div"
         sx={HelloMoments}>
-          HelloMoments
+          Hello Moments
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Share moments around the world with loved ones today. 
         </Typography>
       </CardContent>
-      <CardActions sx={LoginCardActions}>
+      <CardActions sx={loginCardActions}>
         <Typography size="small"
         sx={loginTab}>LOGIN</Typography>
         <Typography size="small"
         sx={createaccountTab}
         >CREATE ACCOUNT</Typography>
       </CardActions>
-      <CardContent sx={LoginCardContent}>
+      <CardContent sx={loginCardContent}>
         <Typography 
         gutterBottom variant="h5" 
         component="div"
         sx={loginTitle}>
           Login
         </Typography>
-        <form onSubmit={formik.handleSubmit}
-        sx={loginForm}
+      
+      
+      
+        <Formik 
+        initialValues={{
+            email: "example@example.com", 
+            password: "Pass123", 
+    
+        }}
+        validationSchema={
+            Yup.object().shape({
+                email: Yup.string()
+                .email('Must be a valid email.')
+                .max(255)
+                .required('Email is required.'),
+                password: Yup.string()
+                .min(6, 'Must include at least 6 characters.')
+                .max(25, 'We KNOW your password isn' + 't more than 25 characters long.')
+                .required('A password is required.')
+            })}
+        onSubmit={ async (value, {setErrors, setStatus, setSubmitting}) => {
+        try {
+           
+            setStatus({success: true})
+            setSubmitting(false)
+            await identity.signup({
+              email: value.email, password: value.password, user_metadata: {
+                full_name: value.name
+              }
+            }).then(() => {
+              handleClose()
+              console.log('Submit Successful!')
+            })
+        } catch (err) {
+            console.error(err)
+            setStatus({success: false})
+            setErrors({ submit: err.message })
+            setSubmitting(false)
+        } 
+        }}
         >
-        <TextField
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-          sx={forminputHeader}
-        />
-        <TextField
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-          sx={forminputHeader}
-        />
-        <Button 
-        color="primary" 
-        variant="contained" 
-        fullWidth type="submit"
-        sx={loginFormButton}
-        >
-          Submit
-        </Button>
-      </form>
+        {({errors, 
+            values, 
+            handleSubmit, 
+            handleBlur, 
+            handleChange, 
+            isSubmitting, 
+            touched,
+            }) => (
+    <form noValidate onSubmit={handleSubmit}>
+    
 
+      <TextField
+      error={Boolean(touched.email && errors.email)}
+      fullWidth
+      helperText={touched.email && errors.email}
+      label="Email"
+      margin="normal" 
+      name="email"
+      type="email"
+      variant="outlined"
+      onBlur={handleBlur}
+      onChange={handleChange}
+      value={values.email}
+      
+      />
+      <TextField
+      error={Boolean(touched.password && errors.password)}
+       fullWidth
+       helperText={touched.password && errors.password}
+       label="Password"
+       margin="normal" 
+       name="password"
+       type="password"
+       variant="outlined"
+       onBlur={handleBlur}
+       onChange={handleChange}
+       value={values.password}
+      
+      
+      />
+       
+      {errors.submit && (
+          <Box sx={{
+              mt: 3
+          }}>
+        <FormHelperText error>
+          {errors.submit}
+        </FormHelperText>
+        </Box>
+      )}
+      <Button
+      fullWidth 
+      size="large"
+      color="primary"
+      bgcolor="primary"
+      disabled={isSubmitting}
+      type="submit"
+      >LOGIN</Button>
+      </form>
+        )}
+      </Formik>
+    
+    
+    
+    
       </CardContent>
       </Col>
       </Row>
